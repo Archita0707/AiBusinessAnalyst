@@ -1,19 +1,23 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
 import ChatInterface from './pages/ChatInterface';
 import Glossary from './pages/Glossary';
-import Dashboard from './pages/Dashboard';
+import Auth from './pages/Auth';
 
-export default function App() {
+function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<ChatInterface />} />
-          <Route path="/glossary" element={<Glossary />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<Auth />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="chat" element={<ChatInterface />} />
+          <Route path="glossary" element={<Glossary />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
+
+export default App;
