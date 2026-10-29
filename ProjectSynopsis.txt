@@ -1,0 +1,183 @@
+A
+
+SYNOPSIS REPORT
+
+On
+Schema-Aware AI Business Analyst
+Submitted in partial fulfilment of the requirements of the degree of
+Bachelor of Technology
+
+
+
+
+
+Submitted by
+
+Archita Agrawal                     2300330100067
+Yashika Awasthi                     2300330100276
+Vartika Shukla                        2300330100265
+
+
+DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING
+RAJ KUMAR GOEL INSTITUTE OF TECHNOLOGY, GHAZIABAD
+Affiliated to
+DR.A.P.J.ABDUL KALAM TECHNICAL UNIVERSITY, LUCKNOW
+AUGUST 2026
+
+
+DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING
+
+INDEX
+
+1-	Introduction
+2-	Literature Review
+3-	Objective and Scope
+4-	Methodology/ Planning of Work
+5-	Hardware And Software Requirements
+6-	Limitations
+7-	Expected Outcome
+8-	References
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. INTRODUCTION
+Organizations generate large volumes of structured business data through sales, customers, products, transactions, inventory, finance, and other operational activities. Although this data can provide valuable insights for decision-making, extracting useful information generally requires knowledge of databases, SQL, data visualization, and business intelligence tools. Small organizations and non-technical users may face difficulties in converting their business questions into appropriate database queries and interpreting the resulting data.
+Recent advances in Large Language Models (LLMs) have enabled Natural Language to SQL (NL2SQL) systems, allowing users to interact with relational databases using ordinary language. However, generating SQL directly from natural-language questions remains challenging because business questions can be ambiguous, database schemas can be complex, and the meaning of business terms may not be explicitly represented in the database structure. Recent research has shown that schema understanding, contextual information, query decomposition, and execution-based refinement can significantly influence the performance of LLM-based text-to-SQL systems [2], [3], [6], [8], [9].
+The proposed project, AI Business Analyst, aims to develop an intelligent and user-friendly analytics platform that allows users to ask business questions in natural language and obtain data-driven answers, visualizations, and analytical insights. The system will combine an ASP.NET Core Web API, React, SQL Server, and a Python FastAPI AI microservice.
+A key feature of the proposed system is a Business Glossary, through which business-specific terms can be mapped to their corresponding data definitions and SQL logic. For example, the term "Revenue" may be defined as the sum of sales for completed transactions. This semantic information will be provided to the LLM along with relevant database schema information to improve the generation of SQL queries [8], [9].
+Another important feature will be Glass-Box SQL generation. Instead of executing an AI-generated query without user visibility, the system will display the generated SQL query and a plain-language explanation before execution. The analyst can inspect or modify the query and then execute it through a read-only database connection. The generated SQL can be reviewed before execution, providing greater transparency and user control over AI-generated queries, particularly given the possibility of SQL-generation errors [3], [6].
+The system will further provide automatic data profiling, visualization, rule-based insight generation, anomaly detection, query history, dashboard functionality, and report generation. The overall objective is to provide an affordable and transparent AI-assisted business analytics platform suitable for students, small organizations, and users who may not possess advanced SQL expertise.
+
+2. LITERATURE REVIEW
+Recent research demonstrates significant progress in using Large Language Models for Natural Language to SQL generation. However, existing research also identifies challenges related to schema complexity, ambiguity, database grounding, query correctness, computational cost, and real-world deployment [2], [3], [6], [8], [9]. The following table summarizes 10 relevant research works published after 2023.
+
+
+Table 1: Comparative Literature Review
+No.	Research Paper / Year	Methodology	Gap / Limitation	Future Scope
+1	Perezhohin et al. (2024), Array [1], Elsevier	Uses computational linguistics, vocabulary and sentence embeddings for zero-shot NL-to-SQL.	Limited use of LLMs and explicit business semantics.	Combine semantic retrieval with LLMs and business context.
+2	Han et al. (2024), Knowledge-Based Systems [2], Elsevier	uniText2SQL performs table-word extraction, table selection and SQL generation.	Real-world schema selection remains challenging for non-technical users.	Improve automatic schema retrieval using business context.
+3	Guo et al. (2025), Information Processing & Management [3], Elsevier	Uses retrieval-augmented generation with query-pattern retrieval and meta-instruction reasoning.	Retrieves query/reasoning patterns rather than explicit business definitions.	Combine query retrieval with business-semantic retrieval.
+4	Ojuri et al. (2025), Information Processing & Management [4], Elsevier	Combines LLMs and intelligent agents; evaluates fine-tuning and few-shot learning.	Domain adaptation can require additional model complexity/cost.	Use retrieval-based domain adaptation instead of extensive fine-tuning.
+5	Yan et al. (2025), Pattern Recognition Letters [5], Elsevier	SPS-SQL uses pre-synthesized SQL queries and schema-based few-shot examples.	Focuses mainly on schema/examples, not business rules.	Incorporate business definitions and organizational rules.
+6	Hong et al. (2025), IEEE TKDE [6]	Surveys LLM-based Text-to-SQL, including prompting, fine-tuning, retrieval and evaluation.	Identifies continuing issues in schema linking, robustness and practical deployment.	Develop robust, context-aware enterprise Text-to-SQL systems.
+7	Banerji et al. (2025), IEEE SCEECS [7]	Applies LLM-based NL-to-SQL for utility dashboards and data analysis.	Domain-specific implementation limits general applicability.	Extend NL-to-SQL toward generic business analytics and visualization.
+8	Nascimento et al. (2026), Data & Knowledge Engineering [8], Elsevier	Uses knowledge graphs, schema linking, keyword search and retrieved few-shot examples.	Knowledge-graph construction can add implementation complexity.	Explore lightweight business-semantic retrieval alternatives.
+9	Awotunde et al. (2026), Advanced Engineering Informatics [9], Elsevier	Combines knowledge graphs and RAG for domain-specific SQL generation.	Designed around specialized domain knowledge and infrastructure.	Generalize schema-guided RAG across business domains.
+10	Tang et al. (2026), Information Processing & Management [10], Elsevier	Uses structured SQL decomposition, schema linking and Q-value-guided reasoning.	Focuses on generation reasoning rather than business-context understanding.	Combine structured reasoning with business-semantic retrieval.
+Research Gap
+Nascimento et al. [8] proposed a Text-to-SQL strategy that uses knowledge graphs, schema linking, keyword search, and retrieved few-shot examples to improve SQL generation for real-world databases. However, the construction and use of knowledge graphs can introduce additional implementation complexity. This creates an opportunity to investigate whether a lightweight business-semantic representation, such as a configurable Business Glossary, can provide useful domain context without requiring a complex knowledge-graph infrastructure. Therefore, this project focuses on evaluating whether adding Business Glossary-based semantic information to database schema information improves Natural Language-to-SQL generation accuracy compared with schema-only prompting.
+
+3. OBJECTIVE AND SCOPE
+3.1 Objectives
+The major objectives of the proposed project are:
+1.	To develop an AI-assisted business analytics platform that allows users to query business data using natural language.
+2.	To convert natural-language business questions into SQL queries using Large Language Models.
+3.	To improve query generation by providing relevant database schema information and a configurable Business Glossary to the AI system.
+4.	To implement a Glass-Box SQL mechanism that allows users to view, understand, modify, and approve generated SQL before execution.
+5.	To provide secure, read-only access to analytical data and prevent modification of the underlying business database.
+6.	To automatically profile uploaded datasets by identifying column types, missing values, basic statistics, and other data characteristics.
+7.	To automatically generate suitable visualizations from query results.
+8.	To generate understandable business insights from analytical results.
+9.	To detect potential anomalies in important business metrics using statistical techniques.
+10.	To maintain query history and support conversational follow-up questions.
+11.	To provide dashboard and report-generation functionality for business users.
+12.	To evaluate the effect of business-semantic information on Natural Language to SQL accuracy.
+3.2 Mapping to Sustainable Development Goals (SDGs)
+Complex Engineering Problem Identified: The core engineering challenge is enabling non-technical users - including those in small businesses, educational institutions, and resource-limited settings - to access and interpret structured business data without requiring expertise in SQL or database systems. This involves managing the semantic gap between natural language and formal query languages, handling complex schemas, and ensuring transparency and safety in AI-driven query execution.
+Table 2: Mapping to Relevant SDGs:
+SDG	Relevance
+SDG 4 - Quality Education	The platform supports students and educators in exploring data analytics without requiring specialized technical knowledge.
+SDG 8 - Decent Work and Economic Growth	By enabling small businesses to access data-driven insights affordably, the system supports informed decision-making and productivity.
+SDG 9 - Industry, Innovation and Infrastructure	The project contributes to AI-driven innovation in business intelligence and advances accessible data infrastructure for small-scale organizations.
+SDG 17 - Partnerships for the Goals	Open, transparent, and replicable AI tooling fosters collaboration between academic research and practical industry applications.
+Sustainable Objectives Alongside Technical Objectives:
+•	Develop an inclusive, low-cost analytics platform accessible to non-expert users (SDG 4, SDG 8).
+•	Reduce barriers to data literacy and evidence-based decision-making in small and medium enterprises (SDG 8, SDG 9).
+•	Promote transparent and explainable AI usage in real-world deployments (SDG 9).
+3.3 Scope
+The proposed system will primarily focus on structured business data stored in SQL Server databases and uploaded CSV/Excel datasets. Users will be able to interact with the system through a React-based interface. The scope includes user authentication and role-based access, CSV/Excel data ingestion, SQL Server database integration, automated data profiling, Business Glossary management, schema-aware natural-language querying, LLM-based SQL generation, SQL explanation, SQL editing and validation, read-only SQL execution, result visualization, dashboard creation, automated insight narration, statistical anomaly detection, query history, multi-turn conversational queries, and PDF/Word report generation.
+The initial implementation will focus on relational datasets and analytical questions such as: "What were our top five products by revenue?", "Which region generated the highest sales in 2025?", "Compare monthly sales between 2024 and 2025.", and "Which category has the highest profit margin?"
+The project will not attempt to train a new Large Language Model or support large-scale enterprise data warehouses, real-time streaming analytics, or complex multi-tenant governance.
+
+4. METHODOLOGY / PLANNING OF WORK
+The proposed system will follow a modular software-development methodology consisting of requirement analysis, system design, implementation, integration, testing, and evaluation. The steps below describe the planned workflow.
+Step 1 – Requirement Analysis: Business analytics requirements will be identified, including supported datasets, user roles, natural-language questions, dashboard requirements, and reporting requirements.
+Step 2 – Database and System Design: SQL Server will be designed to store users, datasets, glossary definitions, query history, dashboards, and analytical metadata following a layered architecture.
+Step 3 – Data Ingestion and Profiling: Users will upload CSV/Excel files or select supported SQL Server data sources. The system will analyse column names, data types, missing values, record counts, min/max values, and basic statistics.
+Step 4 – Business Glossary: Administrators/analysts will define business terms and their corresponding SQL meanings. For example: Revenue → SUM(Sales); Profit Margin → SUM(Profit)/SUM(Sales). These definitions will be supplied to the LLM as semantic context [8], [9].
+Step 5 – Schema-Aware Query Generation: The user's natural-language question will be forwarded from the React frontend to the ASP.NET Core API, which will retrieve relevant schema and glossary information and pass it to the Python FastAPI AI microservice. The LLM prompt will contain the user question, relevant tables and columns, relationships, business glossary definitions, and conversation context [2], [6], [8], [9].
+Step 6 – Glass-Box SQL Validation: The generated SQL will be returned to the frontend for user review. The user can view the SQL, read its plain-language explanation, modify it if necessary, and approve it for execution. The backend will validate that the query is read-only.
+Step 7 – Safe SQL Execution and Visualization: Approved queries will be executed via a dedicated read-only database connection. Results will be analysed to select an appropriate chart type (bar, line, pie, KPI card, or table), and concise business insights will be generated automatically.
+Step 8 – Anomaly Detection and Evaluation: Statistical techniques (Z-score or IQR-based) will be used to detect unusual changes in key metrics. The system will be evaluated by comparing schema-only prompting against schema + Business Glossary prompting to measure whether semantic context improves SQL correctness.
+
+
+5. HARDWARE AND SOFTWARE REQUIREMENTS 
+Table 3: Hardware Requirements
+Component	Minimum Requirement	Recommended / Remarks
+Processor	Intel Core i5 or equivalent	Intel Core i5 or higher
+RAM	8 GB	16 GB recommended
+Storage	20 GB available space	20 GB or more
+Operating System	Windows 10/11	Windows 10/11
+Internet Connection	Required	Stable internet connection for LLM APIs
+GPU	Not required	No dedicated GPU required
+Input/Output Devices	Standard peripherals	Keyboard, mouse, display, etc.
+
+Table 4: Software Requirements
+Category	Technology
+Operating System	Windows 10/11
+Frontend	React.js, HTML5, CSS3, JavaScript
+Backend	ASP.NET Core Web API (C#)
+AI Microservice	Python + FastAPI
+Database	Microsoft SQL Server
+ORM	Entity Framework Core
+AI / LLM	Gemini / OpenAI API or equivalent
+Data Processing	Python, Pandas
+Visualization	Chart.js / Recharts
+Version Control	Git and GitHub
+Authentication	ASP.NET Core Identity / JWT
+Testing	xUnit, Postman, Selenium
+Development IDE	Visual Studio / VS Code
+API Testing	Postman
+
+6. LIMITATIONS
+The proposed system has the following limitations with respect to a larger and more comprehensive system:
+•	The system is designed for structured relational data and will not support unstructured data sources, NoSQL databases, or real-time streaming analytics.
+•	Query generation accuracy depends on the quality of the LLM API and the completeness of the Business Glossary and schema metadata provided.
+•	The system is intended for small to medium-scale datasets; large enterprise data warehouses or multi-tenant environments are outside the current scope.
+•	A stable internet connection is required for LLM API calls; fully offline operation is not supported in the initial implementation.
+•	The system does not perform model training and therefore cannot be fine-tuned for highly domain-specific or proprietary query languages.
+
+7. EXPECTED OUTCOMES
+The proposed project is expected to produce an AI-assisted business analytics platform that converts natural-language business questions into understandable and executable SQL queries using schema-aware prompting and a configurable Business Glossary. The Glass-Box SQL mechanism will allow users to review, modify, and approve AI-generated queries before execution, ensuring transparency and user control. The platform will additionally deliver automatic data visualization, business insight narration, statistical anomaly detection, conversational query support, dashboards, and report generation. Through experimental evaluation, the project is also expected to demonstrate whether the inclusion of business-semantic information measurably improves Natural Language to SQL accuracy compared to schema-only prompting.
+
+
+
+
+8. REFERENCES
+[1] Y. Perezhohin, F. Peres, and M. Castelli, “Combining computational linguistics with sentence embedding to create a zero-shot NLIDB,” Array, vol. 24, Art. no. 100368, 2024, doi: 10.1016/j.array.2024.100368.
+[2] M. Han, S. Park, S. Kim, and H. Kim, “Bridging the gap between text-to-SQL research and real-world applications: A unified all-in-one framework for text-to-SQL,” Knowledge-Based Systems, vol. 306, Art. no. 112697, 2024, doi: 10.1016/j.knosys.2024.112697.
+[3] C. Guo, Z. Tian, J. Tang, S. Li, and T. Wang, “Multi-pattern retrieval-augmented framework for Text-to-SQL with Poincaré-Skeleton retrieval and meta-instruction reasoning,” Information Processing & Management, vol. 62, no. 3, Art. no. 103978, 2025, doi: 10.1016/j.ipm.2024.103978. 
+[4] S. Ojuri, T. A. Han, R. Chiong, and A. Di Stefano, “Optimizing text-to-SQL conversion techniques through the integration of intelligent agents and large language models,” Information Processing & Management, vol. 62, no. 5, Art. no. 104136, 2025, doi: 10.1016/j.ipm.2025.104136. 
+[5] L. Yan, Q. Wan, C. Liu, S. Duan, P. Han, and Y. Xu, “SPS-SQL: Enhancing Text-to-SQL generation on small-scale LLMs with pre-synthesized queries,” Pattern Recognition Letters, vol. 196, pp. 45–51, 2025, doi: 10.1016/j.patrec.2025.04.016.
+[6] Z. Hong, Z. Yuan, Q. Zhang, H. Chen, J. Dong, F. Huang, and X. Huang, “Next-Generation Database Interfaces: A Survey of LLM-based Text-to-SQL,” IEEE Transactions on Knowledge and Data Engineering, vol. 37, no. 12, pp. 7328–7345, 2025, doi: 10.1109/TKDE.2025.3609486.
+[7] J. Banerji, A. Amin, and K. Rathor, “LLM driven Natural Language to SQL for Utility Dashboards,” in 2025 IEEE International Students' Conference on Electrical, Electronics and Computer Science (SCEECS), 2025, doi: 10.1109/SCEECS64059.2025.10941602.
+[8] E. R. Nascimento, C. V. S. Avila, Y. T. Izquierdo, G. M. García, L. F. L. Andrade, M. O. Silva, M. S. P. Facina, M. Lemos, and M. A. Casanova, “A Text-to-SQL strategy based on large language models and knowledge graphs for real-world databases,” Data & Knowledge Engineering, vol. 164, Art. no. 102580, 2026, doi: 10.1016/j.datak.2026.102580.
+[9] I. Awotunde, D. R. Chitte, Y. Shan, W. Sheng, and H. Khaleghian, “Domain-specific SQL generation with LLMs: A hybrid framework combining knowledge graphs and retrieval-augmentation,” Advanced Engineering Informatics, vol. 73, Art. no. 104560, 2026, doi: 10.1016/j.aei.2026.104560.
+[10] M. Tang, L. Zou, S. Cui, W. Wang, Z. Jin, C. Li, and S.-N. Liang, “Q-value guided Text-to-SQL generation: Structured reasoning meets efficient inference exploration,” Information Processing & Management, vol. 63, no. 4, Art. no. 104607, 2026, doi: 10.1016/j.ipm.2025.104607.
+

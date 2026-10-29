@@ -1,0 +1,32 @@
+# Python
+venv/
+.env
+__pycache__/
+*.pyc
+ai_service.log
+
+# Node / React
+node_modules/
+dist/
+.vite/
+
+# .NET build outputs
+**/bin/
+**/obj/
+
+# Visual Studio
+.vs/
+*.user
+
+# Secrets — never commit these
+appsettings.Development.json
+
+# Kiro IDE
+.kiro/
+
+
+*.user
+ai_service.log
+node_modules/
+dist/
+package-lock.json
