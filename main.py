@@ -3,9 +3,12 @@ import logging
 import os
 import re
 import time
+import requests
+from typing import List, Optional
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, Header, HTTPException
-from google import genai
+from langchain_core.language_models import LLM
+# from google import genai
 from pydantic import BaseModel
 
 load_dotenv()
@@ -16,8 +19,37 @@ logging.basicConfig(
     format="%(asctime)s | %(message)s"
 )
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 INTERNAL_API_KEY = os.getenv("INTERNAL_API_KEY", "schema3388")
+
+class CustomLLM(LLM):
+    model: str
+    endpoint_url: str = os.getenv("API_URL", "")
+    headers: dict = {
+        "Content-Type": "application/json",
+        "X-API-KEY": os.getenv("API_KEY", "")
+    }
+    temperature: float = 0.5
+    top_p: float = 0.9
+    max_tokens: int = 2000
+
+    def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
+        payload = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+            "max_tokens": self.max_tokens
+        }
+        response = requests.post(self.endpoint_url, headers=self.headers, json=payload)
+        response.raise_for_status()
+        return response.json()["choices"][0]["message"]["content"]
+
+    @property
+    def _llm_type(self) -> str:
+        return "custom-llm"
+
+llm = CustomLLM(model=os.getenv("MODEL_NAME", "gpt-5-2"))
+
 
 app = FastAPI(title="AI & Data Microservice", version="1.0.0")
 
@@ -71,41 +103,43 @@ async def generate_sql(
         }}
         """
 
-        response = None
+        elapsed_ms = 0.0
+        max_attempts = 4
+        base_delay = 2
+        raw_text = None
         last_error = None
-        models_to_try = ["gemini-3.3-flash"]
 
-                for model_name in models_to_try:
-                    for attempt in range(3):
-                        try:
-                            start_time = time.time()
-                            response = client.models.generate_content(
-                                model=model_name, contents=prompt
-                            )
-                            elapsed_ms = round((time.time() - start_time) * 1000, 2)
-                            if response and response.text:
-                                break
-                        except Exception as e:
-                            last_error = e
-                            if "503" in str(e) or "UNAVAILABLE" in str(e):
-                                time.sleep(2)
-                                continue
-                            else:
-                                break
-                    if response and response.text:
-                        break
+        for attempt in range(max_attempts):
+            try:
+                start_time = time.time()
+                raw_text = llm.invoke(prompt)
+                elapsed_ms = round((time.time() - start_time) * 1000, 2)
+                if raw_text:
+                    break
+            except Exception as e:
+                last_error = e
+                is_retryable = any(
+                    code in str(e) for code in ["503", "502", "overloaded", "unavailable"]
+                )
+                if is_retryable and attempt < max_attempts - 1:
+                    delay = base_delay * (2 ** attempt)
+                    logging.warning(
+                        f"LLM attempt {attempt + 1}/{max_attempts} failed. "
+                        f"Retrying in {delay}s. Error: {str(e)}"
+                    )
+                    time.sleep(delay)
+                    continue
+                else:
+                    break
 
-        if not response or not response.text:
+        if not raw_text:
             raise HTTPException(
                 status_code=503,
-                detail=(
-                    "Google Gemini AI service is currently overloaded (503"
-                    f" Unavailable). Details: {str(last_error)}"
-                ),
+                detail=f"LLM service unavailable after {max_attempts} attempts. Details: {str(last_error)}"
             )
 
-        # Clean and parse JSON response from LLM
-        raw_text = response.text.strip()
+        raw_text = raw_text.strip()
+
         cleaned_json_text = re.sub(
             r"^```(?:json)?\s*|\s*```$", "", raw_text, flags=re.IGNORECASE
         ).strip()

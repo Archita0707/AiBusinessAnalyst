@@ -30,3 +30,4 @@ ai_service.log
 node_modules/
 dist/
 package-lock.json
+.github/
