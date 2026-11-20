@@ -1,256 +1,392 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Mail, ArrowRight, ShieldCheck, Database } from 'lucide-react';
+
+
+import {
+  Lock,
+  Mail,
+  ArrowRight,
+  ShieldCheck,
+  Database,
+  Sparkles,
+  BarChart3,
+  BrainCircuit
+} from 'lucide-react';
+
+import './Auth.css';
 
 export default function Auth({ onLogin }) {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ email: '', password: '' });
 
-  // Handle Form Submission (Sign In / Register)
+  const [isLogin, setIsLogin] = useState(true);
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  // Handle Login and Registration
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (onLogin) onLogin(formData);
-    console.log(isLogin ? 'Logging in with:' : 'Registering with:', formData);
-    
-    // Smooth navigation to Dashboard after authentication
+
+    if (onLogin) {
+      onLogin(formData);
+    }
+
+    console.log(
+      isLogin ? 'Logging in with:' : 'Registering with:',
+      formData
+    );
+
     navigate('/dashboard');
   };
 
-  // Handle Forgot Password Action
+  // Handle Forgot Password
   const handleForgotPassword = (e) => {
     e.preventDefault();
+
     if (!formData.email) {
-      alert('Please enter your email address first, then click "Forgot password?".');
+      alert('Please enter your email address first.');
       return;
     }
-    alert(`Password reset instructions have been sent to: ${formData.email}`);
+
+    alert(
+      `Password reset instructions have been sent to: ${formData.email}`
+    );
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      width: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '1rem',
-      backgroundColor: '#0b1120',
-      boxSizing: 'border-box'
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '420px',
-        backgroundColor: '#1e293b',
-        borderRadius: '16px',
-        padding: 'clamp(1.5rem, 5vw, 2.5rem)',
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)',
-        border: '1px solid #334155',
-        color: '#f8fafc',
-        boxSizing: 'border-box'
-      }}>
-        {/* Branding Header */}
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.4rem 0.8rem',
-            borderRadius: '20px',
-            backgroundColor: '#3b82f61a',
-            border: '1px solid #3b82f640',
-            color: '#60a5fa',
-            fontSize: '0.8rem',
-            fontWeight: '600',
-            marginBottom: '0.75rem'
-          }}>
-            <Database size={15} /> Schema-Aware AI
+    <div className="auth-page">
+
+      {/* LEFT VISUAL SECTION */}
+
+      <div className="auth-visual">
+
+        <div className="visual-content">
+
+          {/* Heading Badge */}
+
+          <div className="visual-badge">
+            <Sparkles size={17} />
+            AI-Powered Analytics
           </div>
-          <h2 style={{ fontSize: 'clamp(1.35rem, 4vw, 1.75rem)', fontWeight: '700', margin: '0 0 0.5rem 0' }}>
-            {isLogin ? 'Welcome Back' : 'Create Account'}
-          </h2>
-          <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: 0, lineHeight: '1.4' }}>
-            {isLogin 
-              ? 'Sign in to access Schema-Aware AI Business Analyst' 
-              : 'Register with your email to start analyzing schema data'}
+
+          {/* Main Heading */}
+
+          <h1>
+            Transform Data
+            <br />
+            Into <span>Intelligence.</span>
+          </h1>
+
+          <p className="visual-description">
+            Unlock the power of AI to analyze,
+            visualize and grow your business.
+            Make smarter decisions with intelligent insights.
           </p>
-        </div>
 
-        {/* Tab Switcher */}
-        <div style={{
-          display: 'flex',
-          backgroundColor: '#0f172a',
-          padding: '4px',
-          borderRadius: '10px',
-          marginBottom: '1.5rem',
-          border: '1px solid #334155'
-        }}>
-          <button
-            type="button"
-            onClick={() => setIsLogin(true)}
-            style={{
-              flex: 1,
-              padding: '0.65rem 0.5rem',
-              border: 'none',
-              borderRadius: '7px',
-              backgroundColor: isLogin ? '#2563eb' : 'transparent',
-              color: isLogin ? '#ffffff' : '#94a3b8',
-              fontWeight: '600',
-              fontSize: '0.875rem',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            Sign In
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsLogin(false)}
-            style={{
-              flex: 1,
-              padding: '0.65rem 0.5rem',
-              border: 'none',
-              borderRadius: '7px',
-              backgroundColor: !isLogin ? '#2563eb' : 'transparent',
-              color: !isLogin ? '#ffffff' : '#94a3b8',
-              fontWeight: '600',
-              fontSize: '0.875rem',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            Register
-          </button>
-        </div>
 
-        {/* Auth Form */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {/* Email Field */}
-          <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: '#cbd5e1', marginBottom: '0.4rem' }}>
-              Email Address
-            </label>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              backgroundColor: '#0f172a',
-              border: '1px solid #334155',
-              borderRadius: '8px',
-              padding: '0.7rem 0.85rem'
-            }}>
-              <Mail size={18} style={{ color: '#64748b', marginRight: '0.75rem', flexShrink: 0 }} />
-              <input
-                type="email"
-                placeholder="name@company.com"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                  color: '#ffffff',
-                  fontSize: '0.9rem',
-                  width: '100%'
-                }}
-              />
+          {/* AI ILLUSTRATION */}
+
+          <div
+            className="illustration-container"
+            style={{ position: 'relative' }}
+          >
+
+            
+
+
+            {/* SQL Query Floating Card */}
+
+            <div className="sql-card">
+
+              <div className="sql-header">
+
+                <Database size={17} />
+
+                <span>AI Generated SQL</span>
+
+                <span className="sql-status"></span>
+
+              </div>
+
+              <div className="sql-code">
+
+                <span>SELECT</span> * <span>FROM</span>
+
+                <br />
+
+                <span>customers</span>
+
+                <br />
+
+                <span>WHERE</span> revenue &gt; 50000;
+
+              </div>
+
+              <div className="sql-success">
+                ✓ Query Generated Successfully
+              </div>
+
             </div>
+
+
+            {/* Smart Database Card */}
+
+            <div className="floating-card card-one">
+
+              <Database size={22} />
+
+              <div>
+                <strong>Smart Database</strong>
+                <small>Schema Connected</small>
+              </div>
+
+            </div>
+
+
+            {/* Data Analytics Card */}
+
+            <div className="floating-card card-two">
+
+              <BarChart3 size={23} />
+
+              <div>
+                <strong>Data Analytics</strong>
+                <small>Insights Generated</small>
+              </div>
+
+            </div>
+
+
+            {/* AI Processing Card */}
+
+            <div className="floating-card card-three">
+
+              <BrainCircuit size={23} />
+
+              <div>
+                <strong>AI Processing</strong>
+                <small>Intelligent Analysis</small>
+              </div>
+
+            </div>
+
+
+            {/* Revenue Insights Chart */}
+
+            <div className="chart-card">
+
+              <div className="chart-title">
+
+                <BarChart3 size={16} />
+
+                <span>Revenue Insights</span>
+
+              </div>
+
+              <div className="chart-bars">
+
+                <span style={{ height: '35%' }}></span>
+
+                <span style={{ height: '60%' }}></span>
+
+                <span style={{ height: '45%' }}></span>
+
+                <span style={{ height: '80%' }}></span>
+
+                <span style={{ height: '65%' }}></span>
+
+                <span style={{ height: '95%' }}></span>
+
+              </div>
+
+            </div>
+
           </div>
 
-          {/* Password Field */}
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem', flexWrap: 'wrap', gap: '0.25rem' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: '500', color: '#cbd5e1' }}>
-                Password
-              </label>
-              {isLogin && (
-                <button
-                  type="button"
-                  onClick={handleForgotPassword}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: 0,
-                    fontSize: '0.775rem',
-                    color: '#60a5fa',
-                    cursor: 'pointer',
-                    textDecoration: 'underline'
-                  }}
-                >
-                  Forgot password?
-                </button>
-              )}
-            </div>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              backgroundColor: '#0f172a',
-              border: '1px solid #334155',
-              borderRadius: '8px',
-              padding: '0.7rem 0.85rem'
-            }}>
-              <Lock size={18} style={{ color: '#64748b', marginRight: '0.75rem', flexShrink: 0 }} />
-              <input
-                type="password"
-                placeholder="••••••••"
-                required
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                  color: '#ffffff',
-                  fontSize: '0.9rem',
-                  width: '100%'
-                }}
-              />
-            </div>
+
+          {/* Visual Footer */}
+
+          <div className="visual-footer">
+
+            <span></span>
+
+            Intelligent Analytics • Smarter Decisions
+
           </div>
 
-          {/* Action Submit Button */}
-          <button
-            type="submit"
-            style={{
-              width: '100%',
-              padding: '0.8rem',
-              backgroundColor: '#2563eb',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: '600',
-              fontSize: '0.95rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              marginTop: '0.25rem',
-              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
-            }}
-          >
-            {isLogin ? 'Sign In' : 'Create Account'}
-            <ArrowRight size={18} />
-          </button>
-        </form>
-
-        {/* Security Footer Badge */}
-        <div style={{
-          marginTop: '1.75rem',
-          paddingTop: '1rem',
-          borderTop: '1px solid #334155',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '0.5rem',
-          color: '#64748b',
-          fontSize: '0.775rem',
-          textAlign: 'center'
-        }}>
-          <ShieldCheck size={16} style={{ color: '#10b981', flexShrink: 0 }} />
-          Protected by Enterprise-grade SSL Encryption
         </div>
+
       </div>
+
+
+      {/* RIGHT LOGIN SECTION */}
+
+      <div className="auth-form-section">
+
+        <div className="auth-card">
+
+
+          {/* Branding */}
+
+          <div className="auth-header">
+
+            <div className="auth-brand">
+
+              <Database size={16} />
+
+              Schema-Aware AI
+
+            </div>
+
+            <h2>
+              {isLogin ? 'Welcome Back' : 'Create Account'}
+            </h2>
+
+            <p>
+              {isLogin
+                ? 'Sign in to access Schema-Aware AI Business Analyst'
+                : 'Register with your email to start analyzing schema data'}
+            </p>
+
+          </div>
+
+
+          {/* Login / Register Tabs */}
+
+          <div className="auth-tabs">
+
+            <button
+              type="button"
+              className={isLogin ? 'active' : ''}
+              onClick={() => setIsLogin(true)}
+            >
+              Sign In
+            </button>
+
+            <button
+              type="button"
+              className={!isLogin ? 'active' : ''}
+              onClick={() => setIsLogin(false)}
+            >
+              Register
+            </button>
+
+          </div>
+
+
+          {/* Authentication Form */}
+
+          <form
+            onSubmit={handleSubmit}
+            className="auth-form"
+          >
+
+            {/* Email */}
+
+            <div className="form-group">
+
+              <label>Email Address</label>
+
+              <div className="input-wrapper">
+
+                <Mail size={18} />
+
+                <input
+                  type="email"
+                  placeholder="name@company.com"
+                  required
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      email: e.target.value
+                    })
+                  }
+                />
+
+              </div>
+
+            </div>
+
+
+            {/* Password */}
+
+            <div className="form-group">
+
+              <div className="password-label">
+
+                <label>Password</label>
+
+                {isLogin && (
+
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className="forgot-password"
+                  >
+                    Forgot password?
+                  </button>
+
+                )}
+
+              </div>
+
+              <div className="input-wrapper">
+
+                <Lock size={18} />
+
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  required
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      password: e.target.value
+                    })
+                  }
+                />
+
+              </div>
+
+            </div>
+
+
+            {/* Submit Button */}
+
+            <button
+              type="submit"
+              className="submit-button"
+            >
+
+              {isLogin ? 'Sign In' : 'Create Account'}
+
+              <ArrowRight size={19} />
+
+            </button>
+
+          </form>
+
+
+          {/* Security Footer */}
+
+          <div className="auth-security">
+
+            <ShieldCheck size={17} />
+
+            <span>
+              Protected by Enterprise-grade SSL Encryption
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

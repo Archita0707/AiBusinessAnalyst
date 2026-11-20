@@ -1,0 +1,74 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 40px;
+  background: linear-gradient(
+    135deg,
+    #070d20,
+    #101d40,
+    #090e24
+  );
+  color: white;
+}
+
+/* Left Section */
+
+.visual-section {
+  width: 45%;
+  padding: 30px;
+}
+
+.ai-badge {
+  display: inline-block;
+  padding: 12px 20px;
+  border: 1px solid #315bba;
+  border-radius: 30px;
+  color: #69aaff;
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.visual-section h1 {
+  font-size: 48px;
+  margin-top: 30px;
+  line-height: 1.2;
+}
+
+.visual-section h1 span {
+  color: #448dff;
+}
+
+.visual-section p {
+  color: #a5b4cf;
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 450px;
+}
+
+.ai-illustration {
+  width: 380px;
+  margin-top: 20px;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Floating Animation */
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-18px);
+  }
+}
+
+/* Right Section */
+
+.form-section {
+  width: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
